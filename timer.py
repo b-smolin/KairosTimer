@@ -33,7 +33,7 @@ class Timer(object):
                  periods: List[Period] = None, isRunning=None,
                  remaining=None, position=None) -> None:
         self.periods = []
-        self.isRunning = True
+        self.isRunning = False
         self.remaining = -1
         self.position = -1
         self.widget = widget
@@ -84,8 +84,13 @@ class ControlWidget(QWidget):
 
     @Slot()
     def start(self):
-        self.timer.isRunning = True
-        self.timer.runTimer()
+        if not self.timer.isRunning:
+            self.timer.isRunning = True
+            self.timer.runTimer()
+            self.button.setText("Pause timer")
+        else:
+            self.timer.isRunning = False
+            self.button.setText("Start Timer")
 
 
 def buildTestWidget() -> ControlWidget:
@@ -95,7 +100,6 @@ def buildTestWidget() -> ControlWidget:
     test_timer.addInterval(Period(8))
     countdown = TimerWidget()
     test_timer.widget = countdown
-    # countdown.show()
     wrapper = ControlWidget(test_timer)
     return wrapper
 
