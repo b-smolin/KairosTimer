@@ -12,10 +12,11 @@ class TimerBox(QWidget):
         self.emptyTitle = QLabel("No timers running." +
                                  "Use the buttons up top to start one")
         self.layout.addWidget(self.emptyTitle)
+        self.timer = None
 
     @Slot()
     def createTimer(self, intervals: List[Period]):
         print("time")
-        self.raise_()
-        # self.timer = Timer(intervals, False)
-        # self.layout.addChildWidget(self.timer)
+        self.timer = Timer(intervals, False)
+        self.layout.addWidget(self.timer)
+        self.timer.show()

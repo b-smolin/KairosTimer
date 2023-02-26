@@ -11,22 +11,23 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.layout = QVBoxLayout(self)
-        self.timers = TimerBox()
+        self.timerWindow = TimerBox()
         self.newTimerButton = QPushButton("New Timer")
         self.loadTimerButton = QPushButton("Load Timer")
         self.newTimerButton.clicked.connect(self.newTimerDialog)
-        self.layout.addWidget(self.timers)
         self.layout.addWidget(self.newTimerButton)
         self.layout.addWidget(self.loadTimerButton)
+        self.layout.addWidget(self.timerWindow)
         self.setWindowTitle("Kairos Timer")
         self.newTimerButton.show()
         self.loadTimerButton.show()
-        self.timers.show()
+        self.timerWindow.show()
         self.timerDialog = None
 
     @Slot()
     def newTimerDialog(self, s):
         self.timerDialog = TimerDialog()
+        self.timerDialog.sendTimer.connect(self.timerWindow.createTimer)
         print("clicked", s)
         self.timerDialog.show()
 
