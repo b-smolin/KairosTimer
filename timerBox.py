@@ -8,7 +8,7 @@ class TimerBox(QWidget):
 
     def __init__(self) -> None:
         super().__init__()
-        self.layout = QVBoxLayout()
+        self.layout = QVBoxLayout(self)
         self.emptyTitle = QLabel("No timers running." +
                                  "Use the buttons up top to start one")
         self.layout.addWidget(self.emptyTitle)

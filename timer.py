@@ -20,7 +20,7 @@ class Period(object):
 
 class Timer(QWidget):
 
-    def __init__(self, periods: List[Period] = None, isRunning=None) -> None:
+    def __init__(self, periods: List[Period] = [], isRunning=None) -> None:
         super().__init__()
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignCenter)
@@ -33,11 +33,11 @@ class Timer(QWidget):
         self.layout.addWidget(self.labelText)
         self.layout.addWidget(self.timeText)
         self.layout.addWidget(self.button)
-        self.periods = []
+        self.periods = periods
         self.isRunning = False
         self.remaining = -1
         self.position = -1
-        self.render()
+#        self.render()
 
     def render(self) -> None:
         self.timeText.show()
