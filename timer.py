@@ -1,8 +1,9 @@
 import sys
 from typing import List
 from PySide6.QtCore import QTimer, Slot, Qt
+from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QWidget, QApplication, \
-    QPushButton, QLabel, QVBoxLayout
+    QPushButton, QLabel, QHBoxLayout
 
 
 class Period(object):
@@ -22,12 +23,15 @@ class Timer(QWidget):
 
     def __init__(self, periods: List[Period] = [], isRunning=None) -> None:
         super().__init__()
-        self.layout = QVBoxLayout(self)
+        self.layout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignCenter)
+        self.palette = QPalette()
+        self.palette.setColor(QPalette.Window, QColor(0, 125, 255))
+        self.palette.setColor(QPalette.WindowText, Qt.white)
+        self.setAutoFillBackground(True)
+        self.setPalette(self.palette)
         self.timeText = QLabel("Time left")
         self.labelText = QLabel("Timer section name")
-        self.timeText.setStyleSheet("font-size: 20px")
-        self.labelText.setStyleSheet("font-size: 18px")
         self.button = QPushButton("Start Timer")
         self.button.clicked.connect(self.press)
         self.layout.addWidget(self.labelText)
