@@ -9,14 +9,16 @@ class TimerBox(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.layout = QVBoxLayout(self)
-        self.emptyTitle = QLabel("No timers running." +
+        self.emptyTitle = QLabel("No timers running. " +
                                  "Use the buttons up top to start one")
         self.layout.addWidget(self.emptyTitle)
         self.timer = None
+        self.count = 0
 
     @Slot()
     def createTimer(self, intervals: List[Period]):
-        print("time")
+        self.count += 1
+        self.emptyTitle.hide()
         self.timer = Timer(intervals, False)
         self.layout.addWidget(self.timer)
         self.timer.show()

@@ -1,14 +1,14 @@
 import sys
 from typing import List
 from PySide6.QtCore import QTimer, Slot, Qt
-from PySide6.QtGui import QColor, QPalette
+from PySide6.QtGui import QColor, QPalette, QFont
 from PySide6.QtWidgets import QWidget, QApplication, \
     QPushButton, QLabel, QHBoxLayout
 
 
 class Period(object):
 
-    def __init__(self, duration=15, label="test", color="red") -> None:
+    def __init__(self, duration=15, label="test", color=QColor(0, 125, 255)) -> None:
         self.label = label
         self.duration = duration
         self.color = color
@@ -26,12 +26,12 @@ class Timer(QWidget):
         self.layout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignCenter)
         self.palette = QPalette()
-        self.palette.setColor(QPalette.Window, QColor(0, 125, 255))
-        self.palette.setColor(QPalette.WindowText, Qt.white)
         self.setAutoFillBackground(True)
         self.setPalette(self.palette)
-        self.timeText = QLabel("Time left")
-        self.labelText = QLabel("Timer section name")
+        self.timeText = QLabel("")
+        self.labelText = QLabel("")
+        self.timeText.setFont(QFont("Bahnschrift", 18, QFont.Bold))
+        self.labelText.setFont(QFont("Bahnschrift", 18, QFont.Bold))
         self.button = QPushButton("Start Timer")
         self.button.clicked.connect(self.press)
         self.layout.addWidget(self.labelText)
@@ -41,7 +41,6 @@ class Timer(QWidget):
         self.isRunning = False
         self.remaining = -1
         self.position = -1
-#        self.render()
 
     def render(self) -> None:
         self.timeText.show()
@@ -80,6 +79,9 @@ class Timer(QWidget):
             else:
                 self.remaining = self.periods[self.position].duration
                 self.labelText.setText(self.periods[self.position].label)
+                self.palette.setColor(QPalette.Window, self.periods[self.position].color)
+                self.palette.setColor(QPalette.WindowText, Qt.white)
+                self.setPalette(self.palette)
         self.remaining -= 0.2
         if self.isRunning:
             remainStr = '{:02d}m {:02d}s'.format(*divmod(int(self.remaining),
