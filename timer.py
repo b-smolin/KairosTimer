@@ -1,3 +1,4 @@
+from doctest import FAIL_FAST
 import sys
 from typing import List
 from PySide6.QtCore import QTimer, Slot, Qt
@@ -21,7 +22,7 @@ class Period(object):
 
 class Timer(QWidget):
 
-    def __init__(self, periods: List[Period] = [], isRunning=None) -> None:
+    def __init__(self, periods: List[Period] = [], isRunning: bool = False) -> None:
         super().__init__()
         self.layout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignCenter)
@@ -38,9 +39,11 @@ class Timer(QWidget):
         self.layout.addWidget(self.timeText)
         self.layout.addWidget(self.button)
         self.periods = periods
-        self.isRunning = False
+        self.isRunning = isRunning
         self.remaining = -1
         self.position = -1
+        if isRunning:
+            self.runTimer()
 
     def render(self) -> None:
         self.timeText.show()
@@ -79,7 +82,8 @@ class Timer(QWidget):
             else:
                 self.remaining = self.periods[self.position].duration
                 self.labelText.setText(self.periods[self.position].label)
-                self.palette.setColor(QPalette.Window, self.periods[self.position].color)
+                self.palette.setColor(
+                    QPalette.Window, self.periods[self.position].color)
                 self.palette.setColor(QPalette.WindowText, Qt.white)
                 self.setPalette(self.palette)
         self.remaining -= 0.2

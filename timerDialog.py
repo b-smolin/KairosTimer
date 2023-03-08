@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QLineEdit, QPushButton, \
-    QVBoxLayout, QGridLayout, QWidget, QLabel
+    QVBoxLayout, QGridLayout, QWidget, QLabel, QCheckBox
 from timer import Period
 from PySide6.QtGui import QColor
 from PySide6.QtCore import Slot, Signal, QSize
@@ -10,13 +10,14 @@ COLOR_OPTIONS = ['#05878a', '#074e67', '#5a175d', '#67074e',
                  '#1c222e', '#41533b', '#006666', '#493267',
                  '#cc0101', '#940000', '#e37448', '#5167a3']
 
+
 class _ColorButton(QPushButton):
 
     def __init__(self, color):
         super().__init__()
         self.setFixedSize(QSize(28, 28))
         self.color = color
-        self.setStyleSheet('background-color: {hex};'.format(hex = color))
+        self.setStyleSheet('background-color: {hex};'.format(hex=color))
 
 
 class _ColorWrapper(QWidget):
@@ -25,6 +26,7 @@ class _ColorWrapper(QWidget):
 
     def _emit_color(self, color):
         self.selected.emit(color)
+
 
 class _ColorGrid(_ColorWrapper):
 
@@ -45,8 +47,9 @@ class _ColorGrid(_ColorWrapper):
                 row += 1
         self.setLayout(palette)
 
+
 class TimerDialog(QWidget):
-    sendTimer = Signal(type(List[Period]))
+    sendTimer = Signal(type(List[Period]), bool)
 
     def __init__(self) -> None:
         super().__init__()
@@ -56,6 +59,7 @@ class TimerDialog(QWidget):
         self.timeBox = QLineEdit()
         self.addIntervalButton = QPushButton("Add time interval")
         self.submitButton = QPushButton("Add Timer")
+        self.runOnSubmit = QCheckBox("Run on start?")
         self.layout = QVBoxLayout(self)
         self.layout.addWidget(self.labelText)
         self.layout.addWidget(self.labelBox)
@@ -63,6 +67,7 @@ class TimerDialog(QWidget):
         self.layout.addWidget(self.timeBox)
         self.colorGrid = _ColorGrid()
         self.layout.addWidget(self.colorGrid)
+        self.layout.addWidget(self.runOnSubmit)
         self.layout.addWidget(self.addIntervalButton)
         self.layout.addWidget(self.submitButton)
         self.colorGrid.selected.connect(self.changeColor)
@@ -71,14 +76,13 @@ class TimerDialog(QWidget):
         self.currentColor = '#05878a'
         self.intervals = []
 
-
     @Slot()
     def changeColor(self, color):
         self.currentColor = color
 
     @Slot()
     def submitTimer(self) -> None:
-        self.sendTimer.emit(self.intervals)
+        self.sendTimer.emit(self.intervals, self.runOnSubmit.isChecked())
         self.hide()
 
     @Slot()

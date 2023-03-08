@@ -16,9 +16,9 @@ class TimerBox(QWidget):
         self.count = 0
 
     @Slot()
-    def createTimer(self, intervals: List[Period]):
+    def createTimer(self, intervals: List[Period], isRunning: bool) -> None:
         self.count += 1
         self.emptyTitle.hide()
-        self.timer = Timer(intervals, False)
+        self.timer = Timer(intervals, isRunning)
         self.layout.addWidget(self.timer)
         self.timer.show()

@@ -3,7 +3,7 @@ import sys
 from timerBox import TimerBox
 from timerDialog import TimerDialog
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QApplication, QPushButton, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QPushButton, QWidget, QVBoxLayout, QMainWindow
 
 
 class MainWindow(QWidget):
@@ -24,7 +24,7 @@ class MainWindow(QWidget):
         self.timerWindow.show()
         self.timerDialog = None
 
-    @Slot()
+    @ Slot()
     def newTimerDialog(self, s):
         self.timerDialog = TimerDialog()
         self.timerDialog.sendTimer.connect(self.timerWindow.createTimer)
