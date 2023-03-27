@@ -48,6 +48,45 @@ class _ColorGrid(_ColorWrapper):
         self.setLayout(palette)
 
 
+class TimeEntryWidget(QWidget):
+
+    def __init__(self, text):
+        super().__init__()
+        self.layout = QGridLayout(self)
+        self.upTen = QPushButton("Add 10")
+        self.upOne = QPushButton("Add 1")
+        self.entryBox = QLineEdit("0")
+        self.label = QLabel(text)
+        self.downTen = QPushButton("Down 10")
+        self.downOne = QPushButton("Down 1")
+        self.value = 0
+        self.upTen.clicked.connect(self.addTen)
+        self.upOne.clicked.connect(self.addOne)
+        self.downTen.clicked.connect(self.subTen)
+        self.downOne.clicked.connect(self.subOne)
+        self.layout.addWidget(self.upTen, 0, 0)
+        self.layout.addWidget(self.upOne, 0, 1)
+        self.layout.addWidget(self.entryBox, 1, 0, 3, 1)
+        self.layout.addWidget(self.label, 1, 3)
+        self.layout.addWidget(self.downTen, 3, 0)
+        self.layout.addWidget(self.downOne, 3, 1)
+
+    def addTen(self):
+        self.value += 10
+        self.entryBox.setText(str(self.value))
+    
+    def addOne(self):
+        self.value += 1
+        self.entryBox.setText(str(self.value))
+    
+    def subTen(self):
+        self.value = 0 if self.value < 10 else self.value - 10
+        self.entryBox.setText(str(self.value))
+    
+    def subOne(self):
+        self.value = 0 if self.value <= 1 else self.value - 1
+        self.entryBox.setText(str(self.value))
+
 class TimerDialog(QWidget):
     sendTimer = Signal(type(List[Period]), bool)
 
@@ -60,11 +99,13 @@ class TimerDialog(QWidget):
         self.addIntervalButton = QPushButton("Add time interval")
         self.submitButton = QPushButton("Add Timer")
         self.runOnSubmit = QCheckBox("Run on start?")
+        self.test = TimeEntryWidget("s")
         self.layout = QVBoxLayout(self)
         self.layout.addWidget(self.labelText)
         self.layout.addWidget(self.labelBox)
         self.layout.addWidget(self.timeText)
         self.layout.addWidget(self.timeBox)
+        self.layout.addWidget(self.test)
         self.colorGrid = _ColorGrid()
         self.layout.addWidget(self.colorGrid)
         self.layout.addWidget(self.runOnSubmit)
